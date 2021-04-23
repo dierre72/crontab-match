@@ -1,16 +1,20 @@
-human-cron
-==========
+Crontab string matching with actual date time
+=============================================
 
-Bash script presents crontab in human readable form.
+Bash script return true if the crontab string passed can run in the actual date otherwise false.
 
-Script uses `crontab` commad avaliable in Ubuntu / Debian and similar Linux distributions 
+Script uses `crontab` command avaliable in Ubuntu / Debian and similar Linux distributions 
 
 Sample use:
-./human-cron.sh [user]
+./crontab.sh "m h d mon w"
 
 Sample output:
--+ komenda /usr/sbin/quotacheck -avug zostanie wykonana codziennie o godzinie 3:00
+true/false
 
-Outpu commands only in polish language.
-
+Available formatting for crontab elements
+- *
+- Integer
+- */Integer (*/2 -> in case of minutes means every 2 minutes)
+- Integer-Integer (10-15 -> in case of minutes between 10 and 15 minutes)
+- Integer-Integer/Integer (10-15/2 -> in case of minutes between 10 and 15 minutes every 2 minutes)
 Version 1.0
