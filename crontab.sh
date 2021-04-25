@@ -4,7 +4,7 @@
 # author Roberto D'Orazio                      #
 # Compare crontab string with actual date      #
 # returns true if the date matches             #
-# based on `crontab` command                   #
+# based on 'crontab' command                   #
 # based on Mikolaj 'Metatron' Niedbala Script  #
 # licenced GNU/ GPL                            #
 ################################################
@@ -33,41 +33,46 @@ IFS=' '
 read -ra CRONTAB <<< $1
 
 # cycle into crontab to check values
-for i in {0..4}; do
+for i in "${!CRONTAB[@]}"; do
         CH=${CRONTAB[$i]}
-        CH=$(echo $CH | sed 's/^0*//')
+        CH=$(echo "$CH" | sed 's/^0*//')
         CD=${DATE[$i]}
-        CD=$(echo $CD | sed 's/^0*//')
-
-        if [[ $CH == "*" ]]; then							
+        CD=$(echo "$CD" | sed 's/^0*//')
+        if [[ $CH == "*" ]]; then
 		continue
 	fi
         
 	if [[ $CH =~ ^\*\/[0-9]{1,2}$ ]]; then                                  
-                NUM=`echo "$CH" |cut -d"/" -f2`;
+                NUM=$(echo "$CH" |cut -d"/" -f2);
                 if ((CD % NUM)); then
                         RUN=false
-	fi
+		fi
         elif [[ $CH =~ ^[0-9]{1,2}$ ]]; then                                    
-                if ! [[ ",$CH," = *",$CD,"* ]]; then
+                if ! [[ "$CH" = "$CD" ]]; then
                         RUN=false
-         fi
+         	fi
         elif [[ $CH =~ ^[0-9]{1,2}-[0-9]{1,2}$ ]]; then                    
-                FR_NUM=`echo "$CH" |cut -d"-" -f1`;
-                TO_NUM=`echo "$CH" |cut -d"-" -f2`;
+                FR_NUM=$(echo "$CH" |cut -d"-" -f1);
+                TO_NUM=$(echo "$CH" |cut -d"-" -f2);
                 if ! (( $FR_NUM <= $CD && $CD <= $TO_NUM )); then
                         RUN=false
-         fi
+         	fi
+        elif [[ $CH =~ "," ]]; then
+                if ! [[ ",$CH," = *",$CD,"* ]]; then
+                        RUN=false
+                fi
         elif [[ $CH =~ ^[0-9]{1,2}-[0-9]{1,2}\/[0-9]{1,2}$ ]]; then             
-                NUM=`echo "$CH" |cut -d"/" -f2`;
-                CH_RANGE=`echo "$CH" |cut -d"/" -f1`;
-                FR_NUM=`echo "$CH_RANGE" |cut -d"-" -f1`;
-                TO_NUM=`echo "$CH_RANGE" |cut -d"-" -f2`;
+                NUM=$(echo "$CH" |cut -d"/" -f2);
+                CH_RANGE=$(echo "$CH" |cut -d"/" -f1);
+                FR_NUM=$(echo "$CH_RANGE" |cut -d"-" -f1);
+                TO_NUM=$(echo "$CH_RANGE" |cut -d"-" -f2);
                 if ((CD % NUM)); then
                         RUN=false
                 elif ! (( $FR_NUM <= $CD && $CD <= $TO_NUM )); then
                         RUN=false
                 fi
+	else
+		RUN=false
         fi;
 done
 echo $RUN
