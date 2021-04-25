@@ -1,4 +1,4 @@
-Crontab string matching with actual date time
+Crontab string matching with actual date time - Version 1.1
 =============================================
 
 Bash script return true if the crontab string passed can run in the actual date otherwise false.
@@ -17,4 +17,5 @@ Available formatting for crontab elements
 - \*/Integer (*/2 -> in case of minutes means every 2 minutes)
 - Integer-Integer (10-15 -> in case of minutes between 10 and 15 minutes)
 - Integer-Integer/Integer (10-15/2 -> in case of minutes between 10 and 15 minutes every 2 minutes)
-Version 1.0
+- Integer,Integer,Integer
+
