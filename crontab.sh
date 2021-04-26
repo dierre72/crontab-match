@@ -38,10 +38,14 @@ for i in "${!CRONTAB[@]}"; do
         CH=$(echo "$CH" | sed 's/^0*//')
         CD=${DATE[$i]}
         CD=$(echo "$CD" | sed 's/^0*//')
-        if [[ $CH == "*" ]]; then
+	if [[ $CH == "*" ]]; then
 		continue
 	fi
-        
+# manage the 0 or 00 in the crontab
+	if [[ -z "$CH" ]]; then
+                CH=0
+        fi
+
 	if [[ $CH =~ ^\*\/[0-9]{1,2}$ ]]; then                                  
                 NUM=$(echo "$CH" |cut -d"/" -f2);
                 if ((CD % NUM)); then
